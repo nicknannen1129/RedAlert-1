@@ -1,0 +1,38 @@
+
+
+.css-var-test{
+    color: var(--blue-var);
+}
+
+
+#user-profile-edit-form{
+    display: none;
+}
+
+#pass-validation-alert-list{
+    display: none;
+}
+
+.auto-li:hover{
+    background-color: #DF6464;
+    cursor: pointer;
+}
+
+.pass-change-cb{
+    width: 20px;
+    height: 20px;
+}
+
+.red-text{
+    color: red;
+}
+
+.saved-search:hover{
+    background-color: #DF6464;
+    cursor: pointer;
+}
+
+.saved-subset:hover{
+    background-color: #DF6464;
+    cursor: pointer;
+}

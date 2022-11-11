@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+  {% block head_title %}
+    <title>Log In!</title>
+  {% endblock %}  
+
+  <meta name="description" content="Our first page">
+
+  {% block css_links %}
+    <link rel="stylesheet" type="text/css" href="{% static 'userLoginApp/css/userLogin.css' %}">
+
+  {% endblock %}
+
+  <!-- CONSIDER USING BOOTSTRAP FLOATING FORM LABELS FOR A BETTER LOOK -->
+  {% block content %}
+    <div class="d-flex flex-column align-items-center my-5 mx-2 footer-padding-fix">
+
+      
+      
+      <div class="w-25">
+        
+        <div id="closable-popup-container" class="d-flex justify-content-center">
+  
+        </div>
+
+
+        <!-- Submits to the save_new_user path in urls.py in the redAlertSite folder. Takes optional args parameter. Add a space and include the argument. -->
+        <form action="{% url 'loginAppUrls:auth_user_login' %}" method="post">
+          <!-- Protects against Cross Site Request Forgeries -->
+          {% csrf_token %}
+
+          <div>
+            <span> Username: </span>
+            <input type="text" id="user-name" class="form-control" name="user-name"> </input>
+          </div>
+
+          <div>
+            <span> Password: </span>
+            <input type="password" id="user-pass" class="form-control" name="user-pass">  </input>
+          </div>
+
+
+          <div class="d-flex flex-row-reverse mt-2">
+
+            <button type="submit" class="red-alert-btn-submit flex-row-between" value="Log in!"> 
+              <div class="me-2">
+                Log in!
+              </div>
+            </button>
+          </div>
+         
+        </form>
+      </div>
+
+      <div>
+
+        <button type="button" class="red-alert-btn-primary flex-row-between"> 
+          <div class="me-2">
+            <a class="no-link-underline" href="{% url 'loginAppUrls:create_new_user'%}"> Create new account! </a>
+          </div>
+          <i class="fa-solid fa-up-right-from-square"></i>
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- HIDDEN INPUTS -->
+    <input type="hidden" value="true" id="on-login-page">
+
+  {% endblock %}
+
+
+{% block js_links %}
+    <script src="{% static 'userLoginApp/js/userLogin.js' %}" > console.log("FYUFUUIASFDIBUABIUSFIBUNASFNUIBHJ BAS")</script> 
+
+    <!-- Hackyish way to warn user why they were redirected to the login page. Calls function in global.js -->
+    {% if changed_pass %}
+      <script>
+        createClosablePopup(message='<div style="text-align: center"><strong>You successfully changed your password! Please log in again.</strong> </div>', targetID='closable-popup-container', color='#19E412', fontSize = 20)
+      </script>
+    {% endif %}
+    
+    {% if loginSuccess == 0 %}
+      <script>
+        createClosablePopup(message='<div style="text-align: center"><strong>No account found with those credentials!</strong> </div>', targetID='closable-popup-container', color='#BC1F43', fontSize = 20, fontColor='#FFFFFF')
+      </script>
+    {% endif %}
+
+    {% if loggedOut == 1 %}
+      <script>
+        createClosablePopup(message='<div style="text-align: center"><strong>Successfully Logged Out!</strong> </div>', targetID='closable-popup-container', color='#19E412', fontSize = 20)
+      </script>
+    {% endif %}
+
+    {% if not_logged_in %}
+      <script >
+        createClosablePopup(message='<div style="text-align: center"><strong>You must be logged in to view that page!</strong> </div>', targetID='closable-popup-container', color='#BC1F43', fontSize = 20, fontColor='#FFFFFF');
+      </script>
+    {% endif %}
+
+    {% if created_new_account == 1 %}
+      <script >
+        createClosablePopup(message='<div style="text-align: center"><strong>Account Created!</strong> </div>', targetID='closable-popup-container', color='#19E412', fontSize = 20);
+      </script>
+    {% endif %}
+
+  {% endblock %}

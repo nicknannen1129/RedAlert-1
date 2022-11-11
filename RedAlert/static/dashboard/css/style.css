@@ -1,0 +1,169 @@
+
+.width-90{
+    width: 90%;
+}
+
+.w-6{
+    width: 6%;
+}
+
+
+.center-inline-elem{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.message-div{
+    width: 35%;
+}
+
+.box-with-header{
+    border-radius: 10px;
+    width: 100%;
+    border: 1px solid rgba(0,0,0,.125);
+
+}
+
+.bwh-header{
+    border: 2px solid;
+    border-radius: 6px;
+    background-color: #0d6efd;
+    color: white;
+}
+
+.bootstrap-grey-border{
+    border-top: 2px solid rgba(0,0,0,.125);
+    border-bottom: 2px solid rgba(0,0,0,.125);
+}
+
+.bootstrap-grey-bottom{
+    border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+
+.sel-sr-color{
+    background-color: #f1f1f1;
+}
+
+.remove-sr-btn{
+    border: 2px solid rgb(216, 49, 49);
+    border-radius: 5px;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.remove-sr-btn:hover{
+    background-color: #f57d7d;
+}
+
+.select-client-btn{
+    border: 2px solid rgb(124, 174, 216);
+    border-radius: 5px;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.select-client-btn:hover{
+    border: 2px solid rgb(124, 174, 216);
+    border-radius: 5px;
+    padding: 3px;
+    cursor: pointer;
+    background-color: rgb(217, 229, 235);
+}
+
+
+.invalid-age-range{
+    border: 2px solid red;
+}
+
+.valid-age-range{
+    border: 2px solid green;
+}
+
+#filter-container{
+    width: 40%;
+    border: 3px solid #0d6efd;
+    border-radius: 8px;
+    margin-left: 5px;
+    padding: 10px;
+
+}
+
+.age-filter-input{
+    width: 35%;
+    display: inline;
+}
+
+.msg-succeeded-popup{
+  text-align: right;
+  color: white;
+  margin-top: 10px;
+  padding-top: 8px;
+  padding-bottom: 10px;
+  padding-right: 5px;
+  border-radius: 10px;
+  background-color: #75e389;
+}
+
+.msg-failed-popup{
+  text-align: right;
+  color: white;
+  margin-top: 10px;
+  padding-top: 8px;
+  padding-bottom: 10px;
+  padding-right: 5px;
+  border-radius: 10px;
+  background-color: #ff5d5d;
+}
+
+.sr-scroll-box{
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#expand-sr-btn{
+    margin-top: 10px;
+}
+
+
+#client-map{
+    height: 700px;
+    width: 90%;
+    margin-left:auto;
+    margin-right: auto;
+    border: 2px solid #0d6efd;
+    border-radius: 15px;
+}
+
+#start-drawing-btn{
+    background-color:#40C95B;
+    border-color:#40C95B;
+}
+
+
+#start-drawing-btn:focus{
+    box-shadow: 0 0 0 .25rem #3DFF68;;
+}
+
+#stop-drawing-btn{
+    background-color:#F01716;
+    border-color:#F01716;
+}
+
+
+#stop-drawing-btn:focus{
+    box-shadow: 0 0 0 .25rem #FF9A9A;;
+}
+
+
+
+#clear-draw-btn{
+    background-color:#F01716;
+    border-color:#F01716;
+}
+
+#clear-draw-btn:focus{
+    box-shadow: 0 0 0 .25rem #F53B3B;;
+}

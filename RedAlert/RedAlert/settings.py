@@ -11,6 +11,16 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import mimetypes
+import environ
+
+env = environ.Env()
+
+# reading .env file, this line must be here for the env variable to work, not sure why.
+environ.Env.read_env()
+
+mimetypes.add_type("text/js", ".js", True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,18 +30,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4)q0epoetdbhhkgkm2-igij7z-+3&m%*pgiluc5*(o7_x)_$i5'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*','127.0.0.1','localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'redAlertSite.apps.RedalertsiteConfig', # redAlertSite folder app.py file, inside here there is the name of a func called RedalertsiteConfig.
+    'userLoginApp.apps.UserLoginAppConfig',
+    'UserPages.apps.UserpagesConfig',
+    'dashboard.apps.DashboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +68,9 @@ ROOT_URLCONF = 'RedAlert.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # This line tells Django to search for templates inside the RedAlert/templates folder first! Used to hold our base.html template for our
+        # nav bar.
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,7 +92,7 @@ WSGI_APPLICATION = 'RedAlert.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'red_alert_db_development',
+        'NAME': 'red_alert_db_development'
     }
 }
 
@@ -129,15 +144,37 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Auto logs out user at browser close.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# user this to set amount of time for user login session to expire, will auto log out user in seconds.
+# Not sure what happens when the session expires except that page access fails.
+#SESSION_COOKIE_AGE
+
+# Define directories where static files are located so django can find them.
+# Without the path to static_assets, the files in static_assets would not be added to /RedAlert/static which is
+# where our production http server, NGINX finds files to serve our site with.
+STATICFILES_DIRS = (
+    'RedAlert/static_assets',
+)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
+# Automatically adds an id to the object.
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#id = models.BigAutoField(primary_key=True)
 
 # Email Settings
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'RedAlertTester@gmail.com'
-EMAIL_HOST_PASSWORD = 'CS486RedAlert'
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_HOST_USER = env("EMAIL_ADDRESS")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASS")
 EMAIL_USE_TLS = True
+
+SMS_BACKEND = 'sms.backends.twilio.SmsBackend'
+TWILIO_ACCOUNT_SID = env("TWILIO_SID")
+TWILIO_AUTH_TOKEN = env("TWILIO_AUTH_KEY")

@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+  {% block head_title %}
+    <title>Profile Page</title>
+  {% endblock %}  
+
+  <meta name="description" content="User profile page">
+
+  {% block css_links %}
+    <link rel="stylesheet" type="text/css" href="{% static 'UserPages/css/userpages.css' %}">
+
+  {% endblock %}
+
+  <!-- CONSIDER USING BOOTSTRAP FLOATING FORM LABELS FOR A BETTER LOOK -->
+  {% block content %}
+    <div class="d-flex flex-column align-items-center my-5 mx-2 footer-padding-fix">
+        <div clas="w-75">
+            <h1> Profile Page </h1>
+
+            <form id="user-profile-display-form">
+
+              <label for="user-email-input">Email: </label>
+              <input id="user-email-input" class="form-control" value="{{ userAuthObj.email }}" disabled></input>
+
+              <label for="email-input">First Name: </label>
+              <input id="first-name-input" class="form-control" value="{{ userAuthObj.first_name }}" disabled>
+
+              <label for="last-name-input">Last Name: </label>
+              <input id="last-name-input" class="form-control" value="{{ userAuthObj.last_name }}" disabled>
+
+              <label for="birthdate-input">Birthdate: </label>
+              <input id="birthdate-input" class="form-control" value="{{ userInfoObj.birthdate }}" disabled>
+
+              <label for="agent-code-input">Agent Code: </label>
+              <input id="agent-code-input" class="form-control" value="{{ userInfoObj.agent_code }}" disabled>
+
+              <label for="phone-number-input">Phone Number: </label>
+              <input id="phone-number-input" class="form-control" value="{{ userInfoObj.agent_phone_number }}" disabled>
+
+              <label for="address-input">Address: </label>
+              <input id="address-input" class="form-control" value="{{ userInfoObj.agent_address }}" disabled>
+
+              <label for="account-creation-input">Account Creation Date: </label>
+              <input id="account-creation-input" class="form-control" value="{{ userInfoObj.account_creation_date }}" disabled>
+
+              
+
+              <button type="button" class="red-alert-btn-primary font-12 flex-row-between no-margin mt-2 w-100" id="edit-user-profile" > 
+                <div class="me-2">
+                  Edit Profile
+                </div>
+                <i class="fa-solid fa-pencil"></i>
+              </button>
+
+            </form>
+
+
+            <form id="user-profile-edit-form" action="{% url 'user_pages_urls:update_user_profile' %}" method="post" >
+              <!-- Protects against Cross Site Request Forgeries. YOUR FORM WONT WORK WITHOUT THIS TOKEN INSIDE THE FORM.-->
+              {% csrf_token %}
+
+              <label for="user-email-input">Email: </label>
+              <input id="user-email-input" name="email" class="form-control" value="{{ userAuthObj.email }}" disabled ></input>
+
+              <label for="email-input">First Name: </label>
+              <input id="first-name-input" name="first_name" class="form-control" value="{{ userAuthObj.first_name }}" required="true" >
+
+              <label for="last-name-input">Last Name: </label>
+              <input id="last-name-input" name="last_name" class="form-control" value="{{ userAuthObj.last_name }}" required="true">
+
+              <label for="birthdate-input">Birthdate: </label>
+              <input id="birthdate-input" name="birthdate" class="form-control" value="{{ userInfoObj.birthdate }}" disabled>
+
+              <label for="agent-code-edit-input">Agent Code: </label>
+              <input id="agent-code-edit-input" name="agent_code" class="form-control" value="{{ userInfoObj.agent_code }}" required="true">
+
+              <label for="phone-number-edit-input">Phone Number: </label>
+              <input id="phone-number-edit-input" name="agent_phone_number" class="form-control" value="{{ userInfoObj.agent_phone_number }}" required="true">
+
+              <label for="address-input">Address: </label>
+              <input id="address-input" name="agent_address" class="form-control" value="{{ userInfoObj.agent_address }}" required="true">
+
+              <label for="account-creation-input">Account Creation Date: </label>
+              <input id="account-creation-input" class="form-control" value="{{ userInfoObj.account_creation_date }}" disabled>
+
+              <div class="d-flex justify-content-between align-items-center"> <div> <h4> Edit Password </h4> </div> <input type="checkbox" id="allow-pass-edit" class="ms-2 pass-change-cb" name="allow-pass-edit" > </div>
+
+              <label for="update-pass-input-1"> Enter New Password </label>
+              <input id="update-pass-input-1" name="pass-1" class="form-control" type="password" disabled>
+
+              <label for="update-pass-input-2"> Repeat New Password </label>
+              <input id="update-pass-input-2"  name="pass-2" class="form-control" type="password" disabled>
+
+              
+              <ul id="pass-validation-alert-list" class="fa-ul">
+                <li id='needs-upper-case-fail' class="display-none"><span class='fa-li'> <i class='fa-solid fa-xmark red-text-color'></i> </span> <span class='red-text-color'>Password must contain 1 upper case letter. </span></li>
+                <li id='needs-upper-case-succeed' class="display-none"><span class='fa-li'> <i class='fa-solid fa-check green-text-color'></i> </span> <span class='green-text-color'>Password must contain 1 upper case letter. </span></li>
+
+                <li id='needs-lower-case-fail' class="display-none"><span class='fa-li'> <i class='fa-solid fa-xmark red-text-color'></i> </span > <span class='red-text-color'>Password must contain 1 lower case letter.</span></li>
+                <li id='needs-lower-case-succeed' class="display-none"><span class='fa-li'> <i class='fa-solid fa-check green-text-color'></i> </span> <span class='green-text-color'>Password must contain 1 lower case letter.</span></li>
+
+                <li id='needs-digit-fail' class="display-none"><span class='fa-li'> <i class='fa-solid fa-xmark red-text-color'></i> </span> <span class='red-text-color'>Password must contain 1 digit.</span></li>
+                <li id='needs-digit-succeed' class="display-none"><span class='fa-li'> <i class='fa-solid fa-check green-text-color'></i> </span> <span class='green-text-color'>Password must contain 1 digit.</span></li>
+
+                <li id='needs-special-char-fail' class="display-none"><span class='fa-li'> <i class='fa-solid fa-xmark red-text-color'></i> </span > <span class='red-text-color'>Password must contain 1 special character.</span></li>
+                <li id='needs-special-char-succeed' class="display-none"><span class='fa-li'> <i class='fa-solid fa-check green-text-color'></i> </span> <span class='green-text-color'>Password must contain 1 special character</span></li>
+
+                <li id='needs-length-fail' class="display-none"><span class='fa-li'> <i class='fa-solid fa-xmark red-text-color'></i> </span> <span class='red-text-color'>Password must be at least 8 characters long.</span></li>
+                <li id='needs-length-succeed' class="display-none"><span class='fa-li'> <i class='fa-solid fa-check green-text-color'></i> </span> <span class='green-text-color'>Password must be at least 8 characters long.</span></li>
+
+                <li id='needs-to-match' class="display-none"><span class='fa-li'> <i class='fa-solid fa-xmark red-text-color'></i> </span> <span class='red-text-color'>Passwords must match before you can submit! </span></li>
+                <li id='pass-match' class="display-none"> <span class='fa-li'> <i class='fa-solid fa-check green-text-color'></i> </span> <span class='green-text-color'> Passwords match! You may submit now! </span> </li>
+                
+              </ul>
+              
+
+              <input id="user-changed-password" type="hidden" name="changed-password" value="false">
+
+              
+              <button type="submit" id="submit-user-profile-changes" class="red-alert-btn-submit flex-row-between">
+                <div class="me-2">
+                  Submit Changes
+                </div>
+                <i class="fa-solid fa-floppy-disk"></i>
+              </button>
+
+              <button type="button" id="discard-user-profile-changes" class="red-alert-btn-delete flex-row-between">
+                <div class="me-2">
+                  Discard Changes
+                </div>
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </form>
+            
+        </div>
+        
+
+    </div>
+
+  {% endblock %}
+
+
+{% block js_links %}
+    <script src="{% static 'UserPages/js/userpages.js' %}" > pageLoad(); </script> 
+  {% endblock %}

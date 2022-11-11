@@ -1,9 +1,38 @@
+Logging into NAU CEFNS to update team website ( must be connected to nau wifi )
+	ssh cch264@linux.cefns.nau
+Directory where our website folder is stored
+	/www/ceias.nau.edu/capstone/projects/CS/2022/RedAlert
+
+PROGRAM VERSIONS:
+	Django==3.2.8
+	djongo==1.3.6
+	pymongo==3.12.2
+	mongoDB==4.4.4
+
+Generate a new Django app:
+	python manage.py startapp your_app_name
+
+Twilio and Email Information:
+	Email Info:
+
+	Email: redalerttester@gmail.com
+	Email Password: CS486RedAlert
+	________________________________________________________
+	Twilio Info:
+
+	Twilio Account Username: redalerttester@gmail.com
+	Twilio Account Password: CS486RedAlertSMS
+	Twilio Phone Number: +19087749012
+	Twilio Account SID: ACd232a36bec0e51f5a8d55b978f773c56
+	Twilio Account Auth: 678c512574c3642b3824a2a5ccce9c59
+
 The folder mysite/ the name can be anything and is simply a container for the project.
 
 The folder mysite/mysite/ is directory is the actual Python package for your project. Its name is the Python package name you’ll need to use to import anything inside it 
 
  This is the folder you will usually by inside of.
 
+Django root directory is the directory that contains manage.py
 
 What are apps in Django?
 	An app is a Web application that does something – e.g., a Weblog system, 
@@ -34,6 +63,9 @@ python manage.py shell
 
 'https://pymongo.readthedocs.io/en/stable/installation.html' Go here and install pymongo to use mongodb with Django.
 
+Install Django:
+	pip3 install Django
+
 Install DJONGO
 	'pip install djongo'
 	
@@ -52,16 +84,77 @@ Djongo allows us to use Django as if we had a relational database, so refer to t
 	https://www.djongomapper.com/get-started/ -- shows you how to use Djangos built in relational object methods
 	to interact with the mongodb database.
 
+Create new Django App
+	python manage.py startapp user_login_app
+	
+Install Jquery for your django app
+	cd into your root project templates file
+	ex: "/home/calvin/Documents/NAUClasses/CS476_486/red_alert_site/RedAlert/static"
+	run the command  "wget https://code.jquery.com/jquery-3.6.0.min.js"
+	This downloads a compressed folder containing jquery source code.
+
+Install apschedular 
+	pip install apscheduler
+
 pip freeze | grep pymongo - view what version of pymongo is running on your project
 pip freeze | grep djongo
 
 
+Setting up the Django Environment Variables file
+	Create .env file inside the same directory as settings.py
+	install this -> 'pip install django-environ'
+	Now inside your .env file define variables in the form TEST_VAR="VALUE"
+	The in settings.py, add these lines
+		import environ
+
+		env = environ.Env()
+
+		environ.Env.read_env()
+
+	Access vars from the .env file with this syntax: env("TEST_VAR")
+
+Install Twilio With Pip
+	pip install "django-sms[twilio]"
+
+Install Nginx   
+	sudo apt install nginx
+   
+Remove enabled site that you dont need.
+   rm /etc/nginx/sites-enabled/default
+
+
+Resetting database migrations in django
+	On linux run this command, (Delete all files in migrations folder except the __init__.py file)
+		find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	Now run this cmd ( Delete cached migration files )
+		find . -path "*/migrations/*.pyc"  -delete 
+	Now run migrtations as normal
+		python manage.py makemigrations
+		python manage.py migrate
+   
+
+Allow NGINx through firewall by using UFW
+	sudo ufw allow 'Nginx Full'
+	
+Allow SSH to server DO THIS BEFORE STARTING UFW or else you cant connect back to the server
+	sudo ufw allow ssh
+
+
+Server commands:
+	Restart Server After Making Changes
+		sudo systemctl restart gunicorn
+
+The templatetags folder holds custom defined filter functions created by the user to be used in html templates.
 
 MONGODB:
+	
+	connect to mongodb shell 'mongo'
+	
+	Show all databases 'show databases'
+
 
 	Collections are like tables, collections hold documents, and each document has an id or object id which is 
 	like a 	primary key.
-	
 	
 	'use dbname' to use or create a db
 	'db.dropDatabase()' to delete a db
@@ -72,6 +165,79 @@ MONGODB:
 	'db.collectionName.find().pretty()' - shows all documents in the collection. pretty is optional but makes it the output look nice.
 	'db.posts.find({ category: 'News'}).pretty()' Finds the document in posts that has category equal to 'News'.
 
+Delete all docs in a collection
+	db.userLoginApp_userinfo.deleteMany({})
+
+Delete one doc from collection
+	db.collectionname.deleteOne( { field_name: value_either_string_or_int } )
+
+
+
+List information about running db server
+	db.serverCmdLineOpts()
+	127.0.0.1:60924
+	db name: red_alert_db_development
+	
+Show ipaddress and port number for running db server	
+	db.runCommand({whatsmyuri : 1})
+
+
+
+Start Stop or Restart mongodb local server
+	sudo systemctl status mongodb
+	sudo systemctl stop mongodb
+	sudo systemctl start mongodb
+	sudo systemctl restart mongodb
+	
+UNMASK MONGODB service. If your system says mongodb service not found do this.
+	sudo service mongod start
+
+
+Using the database on the server with username and pass ( type these commands )
+	use admin
+	db.auth("redalertadmin", passwordPrompt())
+	
+Kill mongo service:
+	ps -edaf | grep mongo | grep -v grep
+	
+	kill pid_of_process
+	
+Change phone number of all clients in mongoDB database
+	 db.redAlertSite_client.updateMany({},{$set:{phone:Long("12252542523")}})
+
+Start mongodb with user account requirement. If you start the service with this command then you will
+need a username and password to login.
+You must start the mongodb server with this command or else the site will not work.
+	mongod --auth
+
+	Edit conf file for service.
+	sudo vim systemctl edit --full mongodb.service
+
+
 	
 	
+	db.createUser(
+		{
+		  user: "redalertadmin",
+		  pwd: passwordPrompt(), // or cleartext password
+		  roles: [
+		    { role: "userAdminAnyDatabase", db: "admin" },
+		    { role: "readWriteAnyDatabase", db: "admin" }
+		  ]
+		}
+	)
+	
+	Port: 27017
+	HOST: hwsrv-937117.hostwindsdns.com
+	
+	
+Meeting Notes:
+	Dont need agent birthday or address. Change agent address to Agency Address. Just remove it from the sign up page.
+	Move filters to the left side of search bar. 
+	Combine filters into a single drop down.
+
+	Add dynamic city filter based on client city.
+
+
+Client ID: 1000-1022
 	
